@@ -1,10 +1,10 @@
 # colombo_vue_app
 
-> A Vue.js project
+> Colombo front-end made using Vue.js.
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
