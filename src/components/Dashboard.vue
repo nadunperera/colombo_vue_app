@@ -1,12 +1,12 @@
 <template>
-  <div class="navigation-left">
-      <h1>Navigation Bar Left</h1>
+  <div class="dashboard">
+      <h1>Dashboard View</h1>
   </div>
 </template>
 
 <script>
 export default {
-    name: "navigation-left",
+    name: "dashboard",
     data() {
         return {};
     }
