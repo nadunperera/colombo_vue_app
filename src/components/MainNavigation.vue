@@ -24,11 +24,7 @@
                 </v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
-              <v-list-tile
-                  v-for="(child, i) in item.children"
-                  :key="i"
-                  @click=""
-              >
+              <v-list-tile v-for="(child, i) in item.children" :key="i" :to="item.path">
                 <v-list-tile-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
                 </v-list-tile-action>
@@ -39,7 +35,7 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-group>
-            <v-list-tile v-else :key="item.text" @click="">
+            <v-list-tile v-else :key="item.text" :to="item.path" active-class="grey lighten-3 deep-purple--text">
               <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
@@ -52,7 +48,7 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="blue darken-3"  dark app fixed>
+    <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="deep-purple darken-1"  dark app fixed>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <span class="hidden-sm-and-down">Colombo</span>
@@ -77,19 +73,22 @@
 <script>
 export default {
   name: "main-navigation",
-  data: () => ({
-    drawer: null,
-    items: [
-      { icon: "dashboard", text: "Dashboard" },
-      { icon: "people", text: "Users" },
-      { icon: "business", text: "Projects" },
-      { icon: "place", text: "Events" },
-      { icon: "call_split", text: "Funnels" },
-      { icon: "monetization_on", text: "Sales" },
-      { icon: "folder_special", text: "Invoices" },
-      { icon: "settings", text: "Settings" }
-    ]
-  }),
+  data() {
+    return {
+      drawer: null,
+      items: [
+        { icon: "dashboard", text: "Dashboard", path: "/" },
+        { icon: "people", text: "Users", path: "users" },
+        { icon: "business", text: "Projects", path: "projects" },
+        { icon: "place", text: "Events", path: "events" },
+        { icon: "call_split", text: "Funnels", path: "funnels" },
+        { icon: "monetization_on", text: "Sales", path: "sales" },
+        { icon: "folder_special", text: "Invoices", path: "invoices" },
+        { icon: "settings", text: "Settings", path: "settings" }
+      ]
+    };
+  },
+  methods: {},
   props: {
     source: String
   }
