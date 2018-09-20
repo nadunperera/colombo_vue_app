@@ -6,7 +6,7 @@
       fixed
       app
     >
-      <v-list dense>
+      <v-list dense class="ml-3">
         <template v-for="item in items">
             <v-layout v-if="item.heading" :key="item.heading" row align-center>
               <v-flex xs6>
@@ -49,7 +49,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="deep-purple darken-1"  dark app fixed>
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+      <v-toolbar-title style="width: 300px">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <span class="hidden-sm-and-down">Colombo</span>
       </v-toolbar-title>
