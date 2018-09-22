@@ -64,12 +64,12 @@ export default {
     selected: [],
     headers: [
       {
-        text: "Dessert (100g serving)",
+        text: "Name",
         align: "left",
         value: "name"
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
+      { text: "Email", value: "calories" },
+      { text: "Address", value: "fat" },
       { text: "Carbs (g)", value: "carbs" },
       { text: "Protein (g)", value: "protein" },
       { text: "Iron (%)", value: "iron" }
