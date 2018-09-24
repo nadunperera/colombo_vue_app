@@ -1,57 +1,103 @@
 <template>
-    <v-layout child-flex>
-        <v-data-table
-            v-model="selected"
-            :headers="headers"
-            :items="users"
-            :pagination.sync="pagination"
-            select-all
-            item-key="name"
-            class="elevation-1"
-        >
-            <template slot="headers" slot-scope="props">
-            <tr>
-                <th>
-                <v-checkbox
-                    :input-value="props.all"
-                    :indeterminate="props.indeterminate"
-                    primary
-                    color="deep-purple"
-                    hide-details
-                    @click.native="toggleAll"
-                ></v-checkbox>
-                </th>
-                <th
-                v-for="header in props.headers"
-                :key="header.text"
-                :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                @click="changeSort(header.value)"
-                >
-                <v-icon small>arrow_upward</v-icon>
-                {{ header.text }}
-                </th>
-            </tr>
-            </template>
-            <template slot="items" slot-scope="props">
-            <tr :active="props.selected" @click="props.selected = !props.selected">
-                <td>
-                <v-checkbox
-                    :input-value="props.selected"
-                    primary
-                    color="deep-purple"
-                    hide-details
-                ></v-checkbox>
-                </td>
-                <td>{{ props.item.name }}</td>
-                <td class="text-xs-right">{{ props.item.email }}</td>
-                <td class="text-xs-right">{{ props.item.mobile_number }}</td>
-                <td class="text-xs-right">{{ props.item.user_status }}</td>
-                <td class="text-xs-right">{{ props.item.user_type }}</td>
-                <td class="text-xs-right">{{ props.item.lead_source }}</td>
-            </tr>
-            </template>
-        </v-data-table>
-    </v-layout>
+  <div>
+    <v-toolbar flat color="white">
+      <v-toolbar-title>Users ({{ users.length }})</v-toolbar-title>
+      <v-divider
+        class="mx-2"
+        inset
+        vertical
+      ></v-divider>
+      <v-spacer></v-spacer>
+      <v-btn color="primary">New User</v-btn>
+      <v-btn color="primary">Show Only Mine</v-btn>
+      <v-btn color="warning">Bulk Email</v-btn>
+      <v-btn color="error">Bulk Delete</v-btn>
+    </v-toolbar>
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="users"
+      :pagination.sync="pagination"
+      select-all
+      item-key="name"
+      class="elevation-1"
+    >
+      <template slot="headers" slot-scope="props">
+        <tr>
+          <th>
+            <v-checkbox
+              :input-value="props.all"
+              :indeterminate="props.indeterminate"
+              primary
+              color="primary"
+              hide-details
+              @click.native="toggleAll"
+            ></v-checkbox>
+          </th>
+          <th
+            class="text-xs-left"
+            v-for="header in props.headers"
+            :key="header.text"
+            :class="['column sortable',
+              pagination.descending ? 'desc' : 'asc',
+              header.value === pagination.sortBy ? 'active' : ''
+            ]"
+            @click="changeSort(header.value)"
+            >
+            <v-icon small>arrow_upward</v-icon>
+            {{ header.text }}
+          </th>
+        </tr>
+      </template>
+      <template slot="items" slot-scope="props">
+        <tr :active="props.selected" @click="props.selected = !props.selected">
+          <td>
+            <v-checkbox
+              :input-value="props.selected"
+              primary
+              color="primary"
+              hide-details
+            ></v-checkbox>
+          </td>
+          <td class="text-xs-left">{{ props.item.name }}</td>
+          <td class="text-xs-left">{{ props.item.email }}</td>
+          <td class="text-xs-left">{{ props.item.mobile_number }}</td>
+          <td class="text-xs-left">{{ props.item.user_status }}</td>
+          <td class="text-xs-left">{{ props.item.user_type }}</td>
+          <td class="text-xs-left">{{ props.item.lead_source }}</td>
+          <td class="justify-center layout px-0">
+            <v-icon
+              small
+              class="mr-2"
+              @click=""
+            >
+              visibility
+            </v-icon>
+            <v-icon
+              small
+              class="mr-2"
+              @click=""
+            >
+              edit
+            </v-icon>
+            <v-icon
+              small
+              class="mr-2"
+              @click=""
+            >
+              email
+            </v-icon>
+            <v-icon
+              small
+              @click=""
+            >
+              delete
+            </v-icon>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -72,7 +118,8 @@ export default {
       { text: "Mobile Number", value: "mobile_number" },
       { text: "Status", value: "user_status" },
       { text: "Type", value: "user_type" },
-      { text: "Lead Source", value: "lead_source" }
+      { text: "Lead Source", value: "lead_source" },
+      { text: 'Actions', value: 'name', sortable: false }
     ],
     users: [
       {

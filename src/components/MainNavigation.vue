@@ -35,7 +35,7 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-group>
-            <v-list-tile v-else :key="item.text" :to="item.path" active-class="grey lighten-3 deep-purple--text">
+            <v-list-tile v-else :key="item.text" :to="item.path" active-class="grey lighten-3 primary--text">
               <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
@@ -48,7 +48,7 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="deep-purple darken-1"  dark app fixed>
+    <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="primary"  dark app fixed>
       <v-toolbar-title style="width: 300px">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <span class="hidden-sm-and-down">Colombo</span>
