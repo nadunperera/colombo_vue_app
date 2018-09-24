@@ -3,7 +3,7 @@
         <v-data-table
             v-model="selected"
             :headers="headers"
-            :items="desserts"
+            :items="users"
             :pagination.sync="pagination"
             select-all
             item-key="name"
@@ -43,11 +43,11 @@
                 ></v-checkbox>
                 </td>
                 <td>{{ props.item.name }}</td>
-                <td class="text-xs-right">{{ props.item.calories }}</td>
-                <td class="text-xs-right">{{ props.item.fat }}</td>
-                <td class="text-xs-right">{{ props.item.carbs }}</td>
-                <td class="text-xs-right">{{ props.item.protein }}</td>
-                <td class="text-xs-right">{{ props.item.iron }}</td>
+                <td class="text-xs-right">{{ props.item.email }}</td>
+                <td class="text-xs-right">{{ props.item.mobile_number }}</td>
+                <td class="text-xs-right">{{ props.item.user_status }}</td>
+                <td class="text-xs-right">{{ props.item.user_type }}</td>
+                <td class="text-xs-right">{{ props.item.lead_source }}</td>
             </tr>
             </template>
         </v-data-table>
@@ -68,102 +68,102 @@ export default {
         align: "left",
         value: "name"
       },
-      { text: "Email", value: "calories" },
-      { text: "Address", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Iron (%)", value: "iron" }
+      { text: "Email", value: "email" },
+      { text: "Mobile Number", value: "mobile_number" },
+      { text: "Status", value: "user_status" },
+      { text: "Type", value: "user_type" },
+      { text: "Lead Source", value: "lead_source" }
     ],
-    desserts: [
+    users: [
       {
         value: false,
-        name: "Frozen Yogurt",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: "1%"
+        name: "Nadun Perera",
+        email: "nadun.perera@me.com",
+        mobile_number: "0405631465",
+        user_status: "Idle",
+        user_type: "client",
+        lead_source: "Exisiting Client"
       },
       {
         value: false,
-        name: "Ice cream sandwich",
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        iron: "1%"
+        name: "Prerana Magar",
+        email: "prerana.magar@me.com",
+        mobile_number: "0428222719",
+        user_status: "New Client",
+        user_type: "client",
+        lead_source: "Friend"
       },
       {
         value: false,
-        name: "Eclair",
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        iron: "7%"
+        name: "Glenn Piper",
+        email: "glenn@meridianaustralia.com.au",
+        mobile_number: "0487665987",
+        user_status: "Staff",
+        user_type: "Administrator",
+        lead_source: "None"
       },
       {
         value: false,
-        name: "Cupcake",
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        iron: "8%"
+        name: "Adam Duffy",
+        email: "adam@meridianaustralia.com.au",
+        mobile_number: "0423654668",
+        user_status: "Staff",
+        user_type: "Sales Agent",
+        lead_source: "None"
       },
       {
         value: false,
-        name: "Gingerbread",
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        iron: "16%"
+        name: "Brett Antymniuk",
+        email: "brett@meridianaustralia.com.au",
+        mobile_number: "0413760023",
+        user_status: "Staff",
+        user_type: "Sales Agent",
+        lead_source: "None"
       },
       {
         value: false,
-        name: "Jelly bean",
-        calories: 375,
-        fat: 0.0,
-        carbs: 94,
-        protein: 0.0,
-        iron: "0%"
+        name: "Benjamin Tavai",
+        email: "bentavai@gmail.com",
+        mobile_number: "0433552764",
+        user_status: "Service Not Suitable",
+        user_type: "Client",
+        lead_source: "Facebook"
       },
       {
         value: false,
-        name: "Lollipop",
-        calories: 392,
-        fat: 0.2,
-        carbs: 98,
-        protein: 0,
-        iron: "2%"
+        name: "Yza Canja",
+        email: "yza@propertyrocket.com.au",
+        mobile_number: "0407833539",
+        user_status: "In Progress",
+        user_type: "Client",
+        lead_source: "Facebook"
       },
       {
         value: false,
-        name: "Honeycomb",
-        calories: 408,
-        fat: 3.2,
-        carbs: 87,
-        protein: 6.5,
-        iron: "45%"
+        name: "Alex Rivas",
+        email: "alex@meridianaustralia.com.au",
+        mobile_number: "0457428833",
+        user_status: "Staff",
+        user_type: "Administrator",
+        lead_source: "None"
       },
       {
         value: false,
-        name: "Donut",
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9,
-        iron: "22%"
+        name: "Matt Pinter",
+        email: "matt.pinter@me.com",
+        mobile_number: "0403290021",
+        user_status: "Delayed Progress",
+        user_type: "Client",
+        lead_source: "Email Marketing"
       },
       {
         value: false,
-        name: "KitKat",
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: "6%"
+        name: "Terry Smith",
+        email: "terry.c@evoke.limo",
+        mobile_number: "0403892292",
+        user_status: "In Progress",
+        user_type: "Client",
+        lead_source: "Event"
       }
     ]
   }),
@@ -171,7 +171,7 @@ export default {
   methods: {
     toggleAll() {
       if (this.selected.length) this.selected = [];
-      else this.selected = this.desserts.slice();
+      else this.selected = this.users.slice();
     },
     changeSort(column) {
       if (this.pagination.sortBy === column) {
