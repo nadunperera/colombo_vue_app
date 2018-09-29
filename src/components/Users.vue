@@ -1,23 +1,37 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>Users ({{ users.length }})</v-toolbar-title>
+      <v-toolbar-title>Users</v-toolbar-title>
       <v-divider
         class="mx-2"
         inset
         vertical
       ></v-divider>
+      <v-toolbar-title class="ml-0 caption font-weight-thin">Total ({{ users.length }})</v-toolbar-title>
+      <v-divider
+        class="mx-2"
+        inset
+        vertical
+      ></v-divider>
+      <v-toolbar-title class="ml-0 caption font-weight-thin">Selected ({{ selected.length }})</v-toolbar-title>
+      <v-divider
+        class="mx-2"
+        inset
+        vertical
+      ></v-divider>
+      <v-toolbar-title class="ml-0 caption font-weight-thin">No Filters Active</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn color="primary">New User</v-btn>
-      <v-btn color="primary">Show Only Mine</v-btn>
-      <v-btn color="warning">Bulk Email</v-btn>
-      <v-btn color="error">Bulk Delete</v-btn>
+      <v-btn color="primary">New</v-btn>
+      <v-btn color="success">Filter</v-btn>
+      <v-btn color="warning" :disabled="isDisabled">Email</v-btn>
+      <v-btn color="error" :disabled="isDisabled">Delete</v-btn>
     </v-toolbar>
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="users"
       :pagination.sync="pagination"
+      :rows-per-page-items="rowsPerPageItems"
       select-all
       item-key="name"
       class="elevation-1"
@@ -26,6 +40,7 @@
         <tr>
           <th>
             <v-checkbox
+              id="headerAll"
               :input-value="props.all"
               :indeterminate="props.indeterminate"
               primary
@@ -104,22 +119,25 @@
 export default {
   name: "users",
   data: () => ({
+    rowsPerPageItems: [10,20,40,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
     pagination: {
-      sortBy: "name"
+      sortBy: "name",
+      rowsPerPage: 10,
     },
     selected: [],
     headers: [
       {
+        id: "headerName",
         text: "Name",
         align: "left",
         value: "name"
       },
-      { text: "Email", value: "email" },
-      { text: "Mobile Number", value: "mobile_number" },
-      { text: "Status", value: "user_status" },
-      { text: "Type", value: "user_type" },
-      { text: "Lead Source", value: "lead_source" },
-      { text: 'Actions', value: 'name', sortable: false }
+      { id: "headerEmail", text: "Email", value: "email" },
+      { id: "headerMobile", text: "Mobile Number", value: "mobile_number" },
+      { id: "headerStatus", text: "Status", value: "user_status" },
+      { id: "headerType", text: "Type", value: "user_type" },
+      { id: "headerLeadSource", text: "Lead Source", value: "lead_source" },
+      { id: "headerActions", text: 'Actions', value: 'name', sortable: false }
     ],
     users: [
       {
@@ -226,6 +244,16 @@ export default {
       } else {
         this.pagination.sortBy = column;
         this.pagination.descending = false;
+      }
+    },
+  },
+
+  computed: {
+    isDisabled() {
+      if (this.selected.length == 0) {
+        return true;
+      } else {
+        return false;
       }
     }
   }
