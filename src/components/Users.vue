@@ -11,12 +11,12 @@
         <v-btn slot="activator" color="primary" dark>New</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">New User</span>
+            <span class="headline">Create New User</span>
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12>
+                <v-flex xs12 sm6>
                   <v-select
                     label="User Type"
                     v-model="userType"
@@ -24,6 +24,16 @@
                     :error-messages="userTypeErrors"
                     @input="$v.userType.$touch()"
                     @blur="$v.userType.$touch()"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-select
+                    label="User Status"
+                    v-model="userStatus"
+                    :items="userStatusChoices"
+                    :error-messages="userStatusErrors"
+                    @input="$v.userStatus.$touch()"
+                    @blur="$v.userStatus.$touch()"
                   ></v-select>
                 </v-flex>
                 <v-flex>
@@ -125,7 +135,7 @@
                     @blur="$v.officeNumber.$touch()"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex xs12 sm6>
                   <v-select
                     label="Age"
                     v-model="age"
@@ -135,29 +145,15 @@
                     @blur="$v.age.$touch()"
                   ></v-select>
                 </v-flex>
+                <v-flex xs12 sm6>
+                  <v-select
+                    label="Lead Source"
+                    v-model="leadSource"
+                    :items="leadSourceChoices"
+                  ></v-select>
+                </v-flex>
                 <v-flex>
-                  <v-menu
-                    ref="menu2"
-                    :close-on-content-click="false"
-                    v-model="menu2"
-                    :nudge-right="40"
-                    :return-value.sync="date"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      slot="activator"
-                      v-model="date"
-                      label="Picker without buttons"
-                      prepend-icon="event"
-                      readonly
-                    ></v-text-field>
-                    <v-date-picker v-model="date" @input="$refs.menu2.save(date)"></v-date-picker>
-
-                  </v-menu>
+                  <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -276,6 +272,7 @@ export default {
     faxNumber: { numeric, minLength: minLength(10) },
     officeNumber: { numeric, minLength: minLength(10) },
     age: { required },
+    userStatus: { required },
   },
   data() {
     return {
@@ -288,6 +285,7 @@ export default {
         'BDM',
         'Accountant',
         'Acquisitions',
+        'Client',
       ],
       firstName: '',
       lastName: '',
@@ -306,10 +304,27 @@ export default {
         '36-50',
         '51+',
       ],
-      date: null,
-      menu: false,
-      modal: false,
-      menu2: false,
+      leadSource: null,
+      leadSourceChoices: [
+        'Facebook',
+        'Friend',
+        'Google Search',
+        'Media Article',
+        'Exisiting Client',
+        'Book Promotion',
+        'Website',
+        'Another Business',
+      ],
+      userStatus: null,
+      userStatusChoices: [
+        'Staff',
+        'New Client',
+        'In Progress',
+        'Delayed Progress',
+        'Service Not Suitable',
+        'Idle',
+      ],
+      doNotContact: false,
       info: null,
       dialogNew: false,
       dialogFilter: false,
@@ -535,6 +550,12 @@ export default {
       const errors = []
       if (!this.$v.age.$dirty) return errors
       !this.$v.age.required && errors.push('Age is required')
+      return errors
+    },
+    userStatusErrors () {
+      const errors = []
+      if (!this.$v.userStatus.$dirty) return errors
+      !this.$v.userStatus.required && errors.push('User Status is required')
       return errors
     },
   }
