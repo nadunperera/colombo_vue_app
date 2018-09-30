@@ -5,185 +5,7 @@
         <v-flex xs12 sm1> <!-- v-flex for title -->
           <v-toolbar-title>Users</v-toolbar-title>
         </v-flex>
-        <v-flex xs12> <!-- v-flex for buttons -->
-          <v-dialog v-model="dialogNew" persistent max-width="500px">
-            <v-btn slot="activator" color="primary" dark>New</v-btn>
-            <v-card>
-              <v-card-title>
-                <span class="headline">Create New User</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container grid-list-md>
-                  <v-layout wrap>
-                    <v-flex xs12 sm6>
-                      <v-select
-                        label="User Type"
-                        v-model="userType"
-                        :items="userTypeChoices"
-                        :error-messages="userTypeErrors"
-                        @input="$v.userType.$touch()"
-                        @blur="$v.userType.$touch()"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                      <v-select
-                        label="User Status"
-                        v-model="userStatus"
-                        :items="userStatusChoices"
-                        :error-messages="userStatusErrors"
-                        @input="$v.userStatus.$touch()"
-                        @blur="$v.userStatus.$touch()"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field
-                        label="First Name"
-                        maxlength="20"
-                        v-model.trim="firstName"
-                        :error-messages="firstNameErrors"
-                        @input="$v.firstName.$touch()"
-                        @blur="$v.firstName.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field
-                        label="Last Name"
-                        v-model.trim="lastName"
-                        maxlength="20"
-                        :error-messages="lastNameErrors"
-                        @input="$v.lastName.$touch()"
-                        @blur="$v.lastName.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field
-                        label="Purchasing Entity"
-                        hint="Full legal purchasing entity name"
-                        v-model.trim="purchasingEntity"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field
-                        label="Email"
-                        v-model="email"
-                        :error-messages="emailErrors"
-                        @input="$v.email.$touch()"
-                        @blur="$v.email.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field
-                        label="Address"
-                        maxlength="50"
-                        v-model.trim="address"
-                        :error-messages="addressErrors"
-                        @input="$v.address.$touch()"
-                        @blur="$v.address.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field
-                        label="Suburb"
-                        maxlength="20"
-                        v-model.trim="suburb"
-                        :error-messages="suburbErrors"
-                        @input="$v.suburb.$touch()"
-                        @blur="$v.suburb.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field
-                        label="Post Code"
-                        maxlength="4"
-                        v-model.trim="postCode"
-                        :error-messages="postCodeErrors"
-                        @input="$v.postCode.$touch()"
-                        @blur="$v.postCode.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm4>
-                      <v-text-field
-                        label="Mobile Number"
-                        maxlength="10"
-                        hint="Format: 0405631465"
-                        v-model.trim="mobileNumber"
-                        :error-messages="mobileNumberErrors"
-                        @input="$v.mobileNumber.$touch()"
-                        @blur="$v.mobileNumber.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm4>
-                      <v-text-field
-                        label="Fax Number"
-                        maxlength="10"
-                        hint="Format: 0405631465"
-                        v-model.trim="faxNumber"
-                        :error-messages="faxNumberErrors"
-                        @input="$v.faxNumber.$touch()"
-                        @blur="$v.faxNumber.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm4>
-                      <v-text-field
-                        label="Office Number"
-                        maxlength="10"
-                        hint="Format: 0405631465"
-                        v-model.trim="officeNumber"
-                        :error-messages="officeNumberErrors"
-                        @input="$v.officeNumber.$touch()"
-                        @blur="$v.officeNumber.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                      <v-select
-                        label="Age"
-                        v-model="age"
-                        :items="ageChoices"
-                        :error-messages="ageErrors"
-                        @input="$v.age.$touch()"
-                        @blur="$v.age.$touch()"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                      <v-select
-                        label="Lead Source"
-                        v-model="leadSource"
-                        :items="leadSourceChoices"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                      <v-text-field
-                        label="Personal Income"
-                        maxlength="7"
-                        v-model.trim="personalIncome"
-                        :error-messages="personalIncomeErrors"
-                        @input="$v.personalIncome.$touch()"
-                        @blur="$v.personalIncome.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                      <v-text-field
-                        label="Partners Income"
-                        maxlength="7"
-                        v-model.trim="partnersIncome"
-                        :error-messages="partnersIncomeErrors"
-                        @input="$v.partnersIncome.$touch()"
-                        @blur="$v.partnersIncome.$touch()"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Close</v-btn>
-                <v-btn color="blue darken-1" flat v-on:click="save">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+        <v-flex xs12 sm7> <!-- v-flex for buttons -->
           <v-dialog v-model="dialogFilter" persistent max-width="500px">
             <v-btn slot="activator" color="success" dark>Filter</v-btn>
             <v-card>
@@ -276,6 +98,247 @@
         </v-alert>
       </v-data-table>
     </v-flex>
+    <v-flex> <!-- v-flex for speed dial -->
+      <v-speed-dial
+        v-model="fab"
+        :top="top"
+        :bottom="bottom"
+        :right="right"
+        :left="left"
+        :direction="direction"
+        :open-on-hover="hover"
+        :transition="transition"
+      >
+        <v-btn
+          slot="activator"
+          v-model="fab"
+          color="pink darken-2"
+          dark
+          fab
+        >
+          <v-icon>keyboard_arrow_up</v-icon>
+          <v-icon>keyboard_arrow_down</v-icon>
+        </v-btn>
+        <v-dialog v-model="dialogNew" persistent max-width="500px">
+          <v-btn
+            fab
+            dark
+            small
+            color="primary"
+            slot="activator"
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
+          <v-card>
+            <v-card-title>
+              <span class="headline">Create New User</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6>
+                    <v-select
+                      label="User Type"
+                      v-model="userType"
+                      :items="userTypeChoices"
+                      :error-messages="userTypeErrors"
+                      @input="$v.userType.$touch()"
+                      @blur="$v.userType.$touch()"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select
+                      label="User Status"
+                      v-model="userStatus"
+                      :items="userStatusChoices"
+                      :error-messages="userStatusErrors"
+                      @input="$v.userStatus.$touch()"
+                      @blur="$v.userStatus.$touch()"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      label="First Name"
+                      maxlength="20"
+                      v-model.trim="firstName"
+                      :error-messages="firstNameErrors"
+                      @input="$v.firstName.$touch()"
+                      @blur="$v.firstName.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      label="Last Name"
+                      v-model.trim="lastName"
+                      maxlength="20"
+                      :error-messages="lastNameErrors"
+                      @input="$v.lastName.$touch()"
+                      @blur="$v.lastName.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field
+                      label="Purchasing Entity"
+                      hint="Full legal purchasing entity name"
+                      v-model.trim="purchasingEntity"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field
+                      label="Email"
+                      v-model="email"
+                      :error-messages="emailErrors"
+                      @input="$v.email.$touch()"
+                      @blur="$v.email.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field
+                      label="Address"
+                      maxlength="50"
+                      v-model.trim="address"
+                      :error-messages="addressErrors"
+                      @input="$v.address.$touch()"
+                      @blur="$v.address.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      label="Suburb"
+                      maxlength="20"
+                      v-model.trim="suburb"
+                      :error-messages="suburbErrors"
+                      @input="$v.suburb.$touch()"
+                      @blur="$v.suburb.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      label="Post Code"
+                      maxlength="4"
+                      v-model.trim="postCode"
+                      :error-messages="postCodeErrors"
+                      @input="$v.postCode.$touch()"
+                      @blur="$v.postCode.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm4>
+                    <v-text-field
+                      label="Mobile Number"
+                      maxlength="10"
+                      hint="Format: 0405631465"
+                      v-model.trim="mobileNumber"
+                      :error-messages="mobileNumberErrors"
+                      @input="$v.mobileNumber.$touch()"
+                      @blur="$v.mobileNumber.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm4>
+                    <v-text-field
+                      label="Fax Number"
+                      maxlength="10"
+                      hint="Format: 0405631465"
+                      v-model.trim="faxNumber"
+                      :error-messages="faxNumberErrors"
+                      @input="$v.faxNumber.$touch()"
+                      @blur="$v.faxNumber.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm4>
+                    <v-text-field
+                      label="Office Number"
+                      maxlength="10"
+                      hint="Format: 0405631465"
+                      v-model.trim="officeNumber"
+                      :error-messages="officeNumberErrors"
+                      @input="$v.officeNumber.$touch()"
+                      @blur="$v.officeNumber.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select
+                      label="Age"
+                      v-model="age"
+                      :items="ageChoices"
+                      :error-messages="ageErrors"
+                      @input="$v.age.$touch()"
+                      @blur="$v.age.$touch()"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select
+                      label="Lead Source"
+                      v-model="leadSource"
+                      :items="leadSourceChoices"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                      label="Personal Income"
+                      maxlength="7"
+                      v-model.trim="personalIncome"
+                      :error-messages="personalIncomeErrors"
+                      @input="$v.personalIncome.$touch()"
+                      @blur="$v.personalIncome.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                      label="Partners Income"
+                      maxlength="7"
+                      v-model.trim="partnersIncome"
+                      :error-messages="partnersIncomeErrors"
+                      @input="$v.partnersIncome.$touch()"
+                      @blur="$v.partnersIncome.$touch()"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex>
+                    <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Close</v-btn>
+              <v-btn color="blue darken-1" flat v-on:click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-btn
+          fab
+          dark
+          small
+          color="green"
+        >
+          <v-icon>filter_list</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="warning"
+        >
+          <v-icon>email</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="error"
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          color="primary"
+        >
+          <v-icon>save_alt</v-icon>
+        </v-btn>
+      </v-speed-dial>
+    </v-flex>
   </v-flex>
 </template>
 
@@ -305,6 +368,19 @@ export default {
   },
   data() {
     return {
+      //speed dial options
+      direction: 'top',
+      fab: false,
+      fling: false,
+      hover: false,
+      tabs: null,
+      top: false,
+      right: true,
+      bottom: true,
+      left: false,
+      transition: 'slide-y-reverse-transition',
+
+      //new user related
       userType: null,
       userTypeChoices: [
         'Administrator',
@@ -356,10 +432,18 @@ export default {
       doNotContact: false,
       personalIncome: '',
       partnersIncome: '',
+
+      //axios api
       info: null,
+
+      //dialog activators
       dialogNew: false,
       dialogFilter: false,
+
+      //search text field
       search: '',
+
+      //data table related
       rowsPerPageItems: [10,20,40,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       pagination: {
         sortBy: "name",
@@ -601,10 +685,31 @@ export default {
       !this.$v.partnersIncome.numeric && errors.push('Partners Income is numerics only')
       return errors
     },
+  },
+  watch: {
+    top (val) {
+      this.bottom = !val
+    },
+    right (val) {
+      this.left = !val
+    },
+    bottom (val) {
+      this.top = !val
+    },
+    left (val) {
+      this.right = !val
+    }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .v-speed-dial {
+    position: absolute;
+  }
+
+  .v-btn--floating {
+    position: relative;
+  }
 </style>
