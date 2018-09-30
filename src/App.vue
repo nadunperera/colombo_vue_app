@@ -3,7 +3,7 @@
     <main-navigation></main-navigation>
     <v-content>
       <v-container fluid fill-height>
-        <v-layout align-start justify-start row fill-height child-flex>
+        <v-layout align-start justify-start row fill-height>
           <!-- content start -->
           <router-view/>
           <!-- content end -->

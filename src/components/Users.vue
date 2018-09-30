@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-flex>
     <v-toolbar flat color="white">
       <v-toolbar-title>Users</v-toolbar-title>
       <v-divider
@@ -152,6 +152,26 @@
                     :items="leadSourceChoices"
                   ></v-select>
                 </v-flex>
+                <v-flex xs12 sm6>
+                  <v-text-field
+                    label="Personal Income"
+                    maxlength="7"
+                    v-model.trim="personalIncome"
+                    :error-messages="personalIncomeErrors"
+                    @input="$v.personalIncome.$touch()"
+                    @blur="$v.personalIncome.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-text-field
+                    label="Partners Income"
+                    maxlength="7"
+                    v-model.trim="partnersIncome"
+                    :error-messages="partnersIncomeErrors"
+                    @input="$v.partnersIncome.$touch()"
+                    @blur="$v.partnersIncome.$touch()"
+                  ></v-text-field>
+                </v-flex>
                 <v-flex>
                   <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
                 </v-flex>
@@ -249,7 +269,7 @@
         Your search for "{{ search }}" found no results.
       </v-alert>
     </v-data-table>
-  </div>
+  </v-flex>
 </template>
 
 <script>
@@ -273,6 +293,8 @@ export default {
     officeNumber: { numeric, minLength: minLength(10) },
     age: { required },
     userStatus: { required },
+    personalIncome: { numeric },
+    partnersIncome: { numeric },
   },
   data() {
     return {
@@ -325,6 +347,8 @@ export default {
         'Idle',
       ],
       doNotContact: false,
+      personalIncome: '',
+      partnersIncome: '',
       info: null,
       dialogNew: false,
       dialogFilter: false,
@@ -527,16 +551,16 @@ export default {
     mobileNumberErrors () {
       const errors = []
       if (!this.$v.mobileNumber.$dirty) return errors
-      !this.$v.mobileNumber.required && errors.push('Mobile number is required')
+      !this.$v.mobileNumber.required && errors.push('Mobile Number is required')
       !this.$v.mobileNumber.minLength && errors.push('Mobile Number must be at most 10 characters long')
-      !this.$v.mobileNumber.numeric && errors.push('Mobile number is numerics only')
+      !this.$v.mobileNumber.numeric && errors.push('Mobile Number is numerics only')
       return errors
     },
     faxNumberErrors () {
       const errors = []
       if (!this.$v.faxNumber.$dirty) return errors
       !this.$v.faxNumber.minLength && errors.push('Fax Number must be at most 10 characters long')
-      !this.$v.faxNumber.numeric && errors.push('Mobile number is numerics only')
+      !this.$v.faxNumber.numeric && errors.push('Fax Number is numerics only')
       return errors
     },
     officeNumberErrors () {
@@ -556,6 +580,18 @@ export default {
       const errors = []
       if (!this.$v.userStatus.$dirty) return errors
       !this.$v.userStatus.required && errors.push('User Status is required')
+      return errors
+    },
+    personalIncomeErrors () {
+      const errors = []
+      if (!this.$v.personalIncome.$dirty) return errors
+      !this.$v.personalIncome.numeric && errors.push('Personal Income is numerics only')
+      return errors
+    },
+    partnersIncomeErrors () {
+      const errors = []
+      if (!this.$v.partnersIncome.$dirty) return errors
+      !this.$v.partnersIncome.numeric && errors.push('Partners Income is numerics only')
       return errors
     },
   }
