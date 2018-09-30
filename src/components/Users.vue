@@ -16,53 +16,156 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex>
-                  <v-text-field label="First Name" required></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field label="Last Name" required></v-text-field>
-                </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Address" required></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field label="Suburb" required></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field label="Post Code" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Mobile Number" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Email" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Password" type="password" required></v-text-field>
-                </v-flex>
-                <v-flex>
                   <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
-                    label="Age"
-                    required
+                    label="User Type"
+                    v-model="userType"
+                    :items="userTypeChoices"
+                    :error-messages="userTypeErrors"
+                    @input="$v.userType.$touch()"
+                    @blur="$v.userType.$touch()"
                   ></v-select>
                 </v-flex>
                 <v-flex>
-                  <v-autocomplete
-                    :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                    label="Interests"
-                    multiple
-                    chips
-                  ></v-autocomplete>
+                  <v-text-field
+                    label="First Name"
+                    maxlength="20"
+                    v-model.trim="firstName"
+                    :error-messages="firstNameErrors"
+                    @input="$v.firstName.$touch()"
+                    @blur="$v.firstName.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-text-field
+                    label="Last Name"
+                    v-model.trim="lastName"
+                    maxlength="20"
+                    :error-messages="lastNameErrors"
+                    @input="$v.lastName.$touch()"
+                    @blur="$v.lastName.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field
+                    label="Purchasing Entity"
+                    hint="Full legal purchasing entity name"
+                    v-model.trim="purchasingEntity"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field
+                    label="Email"
+                    v-model="email"
+                    :error-messages="emailErrors"
+                    @input="$v.email.$touch()"
+                    @blur="$v.email.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field
+                    label="Address"
+                    maxlength="50"
+                    v-model.trim="address"
+                    :error-messages="addressErrors"
+                    @input="$v.address.$touch()"
+                    @blur="$v.address.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-text-field
+                    label="Suburb"
+                    maxlength="20"
+                    v-model.trim="suburb"
+                    :error-messages="suburbErrors"
+                    @input="$v.suburb.$touch()"
+                    @blur="$v.suburb.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-text-field
+                    label="Post Code"
+                    maxlength="4"
+                    v-model.trim="postCode"
+                    :error-messages="postCodeErrors"
+                    @input="$v.postCode.$touch()"
+                    @blur="$v.postCode.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm4>
+                  <v-text-field
+                    label="Mobile Number"
+                    maxlength="10"
+                    hint="Format: 0405631465"
+                    v-model.trim="mobileNumber"
+                    :error-messages="mobileNumberErrors"
+                    @input="$v.mobileNumber.$touch()"
+                    @blur="$v.mobileNumber.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm4>
+                  <v-text-field
+                    label="Fax Number"
+                    maxlength="10"
+                    hint="Format: 0405631465"
+                    v-model.trim="faxNumber"
+                    :error-messages="faxNumberErrors"
+                    @input="$v.faxNumber.$touch()"
+                    @blur="$v.faxNumber.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm4>
+                  <v-text-field
+                    label="Office Number"
+                    maxlength="10"
+                    hint="Format: 0405631465"
+                    v-model.trim="officeNumber"
+                    :error-messages="officeNumberErrors"
+                    @input="$v.officeNumber.$touch()"
+                    @blur="$v.officeNumber.$touch()"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-select
+                    label="Age"
+                    v-model="age"
+                    :items="ageChoices"
+                    :error-messages="ageErrors"
+                    @input="$v.age.$touch()"
+                    @blur="$v.age.$touch()"
+                  ></v-select>
+                </v-flex>
+                <v-flex>
+                  <v-menu
+                    ref="menu2"
+                    :close-on-content-click="false"
+                    v-model="menu2"
+                    :nudge-right="40"
+                    :return-value.sync="date"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <v-text-field
+                      slot="activator"
+                      v-model="date"
+                      label="Picker without buttons"
+                      prepend-icon="event"
+                      readonly
+                    ></v-text-field>
+                    <v-date-picker v-model="date" @input="$refs.menu2.save(date)"></v-date-picker>
+
+                  </v-menu>
                 </v-flex>
               </v-layout>
             </v-container>
-            <small>*indicates required field</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Close</v-btn>
-            <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Save</v-btn>
+            <v-btn color="blue darken-1" flat v-on:click="save">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -75,44 +178,9 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field label="Legal first name" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    label="Legal last name"
-                    hint="example of persistent helper text"
-                    persistent-hint
-                    required
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Email" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Password" type="password" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
-                    label="Age"
-                    required
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-autocomplete
-                    :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                    label="Interests"
-                    multiple
-                    chips
-                  ></v-autocomplete>
-                </v-flex>
+                <!-- v-flex stuff goes here -->
               </v-layout>
             </v-container>
-            <small>*indicates required field</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -189,12 +257,59 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import { validationMixin } from 'vuelidate'
+import { required, email, numeric, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: "users",
+  mixins: [validationMixin],
+  validations: {
+    userType: { required },
+    firstName: { required },
+    lastName: { required },
+    email: { required, email },
+    address: { required },
+    suburb: { required },
+    postCode: { required, numeric },
+    mobileNumber: { required, numeric, minLength: minLength(10) },
+    faxNumber: { numeric, minLength: minLength(10) },
+    officeNumber: { numeric, minLength: minLength(10) },
+    age: { required },
+  },
   data() {
     return {
+      userType: null,
+      userTypeChoices: [
+        'Administrator',
+        'Sales Agent',
+        'Business Partner',
+        'Introducer',
+        'BDM',
+        'Accountant',
+        'Acquisitions',
+      ],
+      firstName: '',
+      lastName: '',
+      purchasingEntity: '',
+      email: '',
+      address: '',
+      suburb: '',
+      postCode: '',
+      mobileNumber: '',
+      faxNumber: '',
+      officeNumber: '',
+      age: null,
+      ageChoices: [
+        '15-25',
+        '26-35',
+        '36-50',
+        '51+',
+      ],
+      date: null,
+      menu: false,
+      modal: false,
+      menu2: false,
       info: null,
       dialogNew: false,
       dialogFilter: false,
@@ -336,7 +451,10 @@ export default {
     clearAll() {
       this.selected = [];
       this.search = '';
-    }
+    },
+    save() {
+      this.$v.$touch()
+    },
   },
 
   computed: {
@@ -346,7 +464,79 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    userTypeErrors () {
+      const errors = []
+      if (!this.$v.userType.$dirty) return errors
+      !this.$v.userType.required && errors.push('User Type is required')
+      return errors
+    },
+    firstNameErrors () {
+      const errors = []
+      if (!this.$v.firstName.$dirty) return errors
+      !this.$v.firstName.required && errors.push('First Name is required')
+      return errors
+    },
+    lastNameErrors () {
+      const errors = []
+      if (!this.$v.lastName.$dirty) return errors
+      !this.$v.lastName.required && errors.push('Last Name is required')
+      return errors
+    },
+    emailErrors () {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Must be valid e-mail')
+      !this.$v.email.required && errors.push('E-mail is required')
+      return errors
+    },
+    addressErrors () {
+      const errors = []
+      if (!this.$v.address.$dirty) return errors
+      !this.$v.address.required && errors.push('Address is required')
+      return errors
+    },
+    suburbErrors () {
+      const errors = []
+      if (!this.$v.suburb.$dirty) return errors
+      !this.$v.suburb.required && errors.push('Suburb is required')
+      return errors
+    },
+    postCodeErrors () {
+      const errors = []
+      if (!this.$v.postCode.$dirty) return errors
+      !this.$v.postCode.required && errors.push('Post Code is required')
+      !this.$v.postCode.numeric && errors.push('Post Code is numerics only')
+      return errors
+    },
+    mobileNumberErrors () {
+      const errors = []
+      if (!this.$v.mobileNumber.$dirty) return errors
+      !this.$v.mobileNumber.required && errors.push('Mobile number is required')
+      !this.$v.mobileNumber.minLength && errors.push('Mobile Number must be at most 10 characters long')
+      !this.$v.mobileNumber.numeric && errors.push('Mobile number is numerics only')
+      return errors
+    },
+    faxNumberErrors () {
+      const errors = []
+      if (!this.$v.faxNumber.$dirty) return errors
+      !this.$v.faxNumber.minLength && errors.push('Fax Number must be at most 10 characters long')
+      !this.$v.faxNumber.numeric && errors.push('Mobile number is numerics only')
+      return errors
+    },
+    officeNumberErrors () {
+      const errors = []
+      if (!this.$v.officeNumber.$dirty) return errors
+      !this.$v.officeNumber.minLength && errors.push('Office Number must be at most 10 characters long')
+      !this.$v.officeNumber.numeric && errors.push('Office number is numerics only')
+      return errors
+    },
+    ageErrors () {
+      const errors = []
+      if (!this.$v.age.$dirty) return errors
+      !this.$v.age.required && errors.push('Age is required')
+      return errors
+    },
   }
 };
 </script>
