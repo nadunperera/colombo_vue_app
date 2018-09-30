@@ -1,274 +1,281 @@
 <template>
   <v-flex>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Users</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
-      <v-dialog v-model="dialogNew" persistent max-width="500px">
-        <v-btn slot="activator" color="primary" dark>New</v-btn>
-        <v-card>
-          <v-card-title>
-            <span class="headline">Create New User</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6>
-                  <v-select
-                    label="User Type"
-                    v-model="userType"
-                    :items="userTypeChoices"
-                    :error-messages="userTypeErrors"
-                    @input="$v.userType.$touch()"
-                    @blur="$v.userType.$touch()"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-select
-                    label="User Status"
-                    v-model="userStatus"
-                    :items="userStatusChoices"
-                    :error-messages="userStatusErrors"
-                    @input="$v.userStatus.$touch()"
-                    @blur="$v.userStatus.$touch()"
-                  ></v-select>
-                </v-flex>
-                <v-flex>
-                  <v-text-field
-                    label="First Name"
-                    maxlength="20"
-                    v-model.trim="firstName"
-                    :error-messages="firstNameErrors"
-                    @input="$v.firstName.$touch()"
-                    @blur="$v.firstName.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field
-                    label="Last Name"
-                    v-model.trim="lastName"
-                    maxlength="20"
-                    :error-messages="lastNameErrors"
-                    @input="$v.lastName.$touch()"
-                    @blur="$v.lastName.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field
-                    label="Purchasing Entity"
-                    hint="Full legal purchasing entity name"
-                    v-model.trim="purchasingEntity"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field
-                    label="Email"
-                    v-model="email"
-                    :error-messages="emailErrors"
-                    @input="$v.email.$touch()"
-                    @blur="$v.email.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field
-                    label="Address"
-                    maxlength="50"
-                    v-model.trim="address"
-                    :error-messages="addressErrors"
-                    @input="$v.address.$touch()"
-                    @blur="$v.address.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field
-                    label="Suburb"
-                    maxlength="20"
-                    v-model.trim="suburb"
-                    :error-messages="suburbErrors"
-                    @input="$v.suburb.$touch()"
-                    @blur="$v.suburb.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-text-field
-                    label="Post Code"
-                    maxlength="4"
-                    v-model.trim="postCode"
-                    :error-messages="postCodeErrors"
-                    @input="$v.postCode.$touch()"
-                    @blur="$v.postCode.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <v-text-field
-                    label="Mobile Number"
-                    maxlength="10"
-                    hint="Format: 0405631465"
-                    v-model.trim="mobileNumber"
-                    :error-messages="mobileNumberErrors"
-                    @input="$v.mobileNumber.$touch()"
-                    @blur="$v.mobileNumber.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <v-text-field
-                    label="Fax Number"
-                    maxlength="10"
-                    hint="Format: 0405631465"
-                    v-model.trim="faxNumber"
-                    :error-messages="faxNumberErrors"
-                    @input="$v.faxNumber.$touch()"
-                    @blur="$v.faxNumber.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <v-text-field
-                    label="Office Number"
-                    maxlength="10"
-                    hint="Format: 0405631465"
-                    v-model.trim="officeNumber"
-                    :error-messages="officeNumberErrors"
-                    @input="$v.officeNumber.$touch()"
-                    @blur="$v.officeNumber.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-select
-                    label="Age"
-                    v-model="age"
-                    :items="ageChoices"
-                    :error-messages="ageErrors"
-                    @input="$v.age.$touch()"
-                    @blur="$v.age.$touch()"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-select
-                    label="Lead Source"
-                    v-model="leadSource"
-                    :items="leadSourceChoices"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-text-field
-                    label="Personal Income"
-                    maxlength="7"
-                    v-model.trim="personalIncome"
-                    :error-messages="personalIncomeErrors"
-                    @input="$v.personalIncome.$touch()"
-                    @blur="$v.personalIncome.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-text-field
-                    label="Partners Income"
-                    maxlength="7"
-                    v-model.trim="partnersIncome"
-                    :error-messages="partnersIncomeErrors"
-                    @input="$v.partnersIncome.$touch()"
-                    @blur="$v.partnersIncome.$touch()"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Close</v-btn>
-            <v-btn color="blue darken-1" flat v-on:click="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="dialogFilter" persistent max-width="500px">
-        <v-btn slot="activator" color="success" dark>Filter</v-btn>
-        <v-card>
-          <v-card-title>
-            <span class="headline">New Filter</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <!-- v-flex stuff goes here -->
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat v-on:click="dialogFilter = false">Close</v-btn>
-            <v-btn color="blue darken-1" flat v-on:click="dialogFilter = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-btn color="warning" :disabled="isDisabled">Email</v-btn>
-      <v-btn color="error" :disabled="isDisabled">Delete</v-btn>
-      <v-btn color="primary">Export</v-btn>
-      <v-btn color="primary" v-on:click="clearAll">Clear</v-btn>
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="search"
-        label="Quick Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-toolbar>
-    <v-toolbar flat color="grey lighten-3">
-      <v-toolbar-title class="ml-0 caption">Total ({{ users.length }})</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
-      <v-toolbar-title class="ml-0 caption">Selected ({{ selected.length }})</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
-      <v-toolbar-title class="ml-0 caption">No Filters Active</v-toolbar-title>
-    </v-toolbar>
-    <v-data-table
-      v-model="selected"
-      :headers="headers"
-      :items="users"
-      :pagination.sync="pagination"
-      :rows-per-page-items="rowsPerPageItems"
-      :search="search"
-      select-all
-      item-key="name"
-      class="elevation-1"
-    >
-      <template slot="items" slot-scope="props">
-        <td>
-          <v-checkbox
-            v-model="props.selected"
+    <v-flex> <!-- v-flex for first toolbar -->
+      <v-toolbar flat color="white">
+        <v-flex xs12 sm1> <!-- v-flex for title -->
+          <v-toolbar-title>Users</v-toolbar-title>
+        </v-flex>
+        <v-flex xs12> <!-- v-flex for buttons -->
+          <v-dialog v-model="dialogNew" persistent max-width="500px">
+            <v-btn slot="activator" color="primary" dark>New</v-btn>
+            <v-card>
+              <v-card-title>
+                <span class="headline">Create New User</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md>
+                  <v-layout wrap>
+                    <v-flex xs12 sm6>
+                      <v-select
+                        label="User Type"
+                        v-model="userType"
+                        :items="userTypeChoices"
+                        :error-messages="userTypeErrors"
+                        @input="$v.userType.$touch()"
+                        @blur="$v.userType.$touch()"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-select
+                        label="User Status"
+                        v-model="userStatus"
+                        :items="userStatusChoices"
+                        :error-messages="userStatusErrors"
+                        @input="$v.userStatus.$touch()"
+                        @blur="$v.userStatus.$touch()"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        label="First Name"
+                        maxlength="20"
+                        v-model.trim="firstName"
+                        :error-messages="firstNameErrors"
+                        @input="$v.firstName.$touch()"
+                        @blur="$v.firstName.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        label="Last Name"
+                        v-model.trim="lastName"
+                        maxlength="20"
+                        :error-messages="lastNameErrors"
+                        @input="$v.lastName.$touch()"
+                        @blur="$v.lastName.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        label="Purchasing Entity"
+                        hint="Full legal purchasing entity name"
+                        v-model.trim="purchasingEntity"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        label="Email"
+                        v-model="email"
+                        :error-messages="emailErrors"
+                        @input="$v.email.$touch()"
+                        @blur="$v.email.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        label="Address"
+                        maxlength="50"
+                        v-model.trim="address"
+                        :error-messages="addressErrors"
+                        @input="$v.address.$touch()"
+                        @blur="$v.address.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        label="Suburb"
+                        maxlength="20"
+                        v-model.trim="suburb"
+                        :error-messages="suburbErrors"
+                        @input="$v.suburb.$touch()"
+                        @blur="$v.suburb.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        label="Post Code"
+                        maxlength="4"
+                        v-model.trim="postCode"
+                        :error-messages="postCodeErrors"
+                        @input="$v.postCode.$touch()"
+                        @blur="$v.postCode.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                      <v-text-field
+                        label="Mobile Number"
+                        maxlength="10"
+                        hint="Format: 0405631465"
+                        v-model.trim="mobileNumber"
+                        :error-messages="mobileNumberErrors"
+                        @input="$v.mobileNumber.$touch()"
+                        @blur="$v.mobileNumber.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                      <v-text-field
+                        label="Fax Number"
+                        maxlength="10"
+                        hint="Format: 0405631465"
+                        v-model.trim="faxNumber"
+                        :error-messages="faxNumberErrors"
+                        @input="$v.faxNumber.$touch()"
+                        @blur="$v.faxNumber.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                      <v-text-field
+                        label="Office Number"
+                        maxlength="10"
+                        hint="Format: 0405631465"
+                        v-model.trim="officeNumber"
+                        :error-messages="officeNumberErrors"
+                        @input="$v.officeNumber.$touch()"
+                        @blur="$v.officeNumber.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-select
+                        label="Age"
+                        v-model="age"
+                        :items="ageChoices"
+                        :error-messages="ageErrors"
+                        @input="$v.age.$touch()"
+                        @blur="$v.age.$touch()"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-select
+                        label="Lead Source"
+                        v-model="leadSource"
+                        :items="leadSourceChoices"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-text-field
+                        label="Personal Income"
+                        maxlength="7"
+                        v-model.trim="personalIncome"
+                        :error-messages="personalIncomeErrors"
+                        @input="$v.personalIncome.$touch()"
+                        @blur="$v.personalIncome.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-text-field
+                        label="Partners Income"
+                        maxlength="7"
+                        v-model.trim="partnersIncome"
+                        :error-messages="partnersIncomeErrors"
+                        @input="$v.partnersIncome.$touch()"
+                        @blur="$v.partnersIncome.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Close</v-btn>
+                <v-btn color="blue darken-1" flat v-on:click="save">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogFilter" persistent max-width="500px">
+            <v-btn slot="activator" color="success" dark>Filter</v-btn>
+            <v-card>
+              <v-card-title>
+                <span class="headline">New Filter</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md>
+                  <v-layout wrap>
+                    <!-- v-flex stuff goes here -->
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" flat v-on:click="dialogFilter = false">Close</v-btn>
+                <v-btn color="blue darken-1" flat v-on:click="dialogFilter = false">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-btn color="warning" :disabled="isDisabled">Email</v-btn>
+          <v-btn color="error" :disabled="isDisabled">Delete</v-btn>
+          <v-btn color="primary">Export</v-btn>
+          <v-btn color="primary" v-on:click="clearAll">Clear</v-btn>
+          <!-- <v-spacer></v-spacer> -->
+        </v-flex>
+        <v-flex xs12 sm4> <!-- v-flex for search field -->
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Quick Search"
+            single-line
             hide-details
-            color="primary"
-          ></v-checkbox>
-        </td>
-        <td class="text-xs-left">{{ props.item.id }}</td>
-        <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.email }}</td>
-        <td class="text-xs-left">{{ props.item.mobile_number }}</td>
-        <td class="text-xs-left">{{ props.item.suburb }}</td>
-        <td class="text-xs-left">{{ props.item.post_code }}</td>
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" v-on:click="">visibility</v-icon>
-          <v-icon small class="mr-2" v-on:click="">edit</v-icon>
-          <v-icon small class="mr-2" v-on:click="">email</v-icon>
-          <v-icon small v-on:click="">delete</v-icon>
-        </td>
-      </template>
-      <v-alert slot="no-results" :value="true" color="error" icon="warning">
-        Your search for "{{ search }}" found no results.
-      </v-alert>
-    </v-data-table>
+          ></v-text-field>
+        </v-flex>
+      </v-toolbar>
+    </v-flex>
+    <v-flex> <!-- v-flex for second toolbar -->
+      <v-toolbar flat color="grey lighten-3">
+        <v-toolbar-title class="ml-0 caption">Total ({{ users.length }})</v-toolbar-title>
+        <v-divider
+          class="mx-2"
+          inset
+          vertical
+        ></v-divider>
+        <v-toolbar-title class="ml-0 caption">Selected ({{ selected.length }})</v-toolbar-title>
+        <v-divider
+          class="mx-2"
+          inset
+          vertical
+        ></v-divider>
+        <v-toolbar-title class="ml-0 caption">No Filters Active</v-toolbar-title>
+      </v-toolbar>
+    </v-flex>
+    <v-flex> <!-- v-flex for data table -->
+      <v-data-table
+        v-model="selected"
+        :headers="headers"
+        :items="users"
+        :pagination.sync="pagination"
+        :rows-per-page-items="rowsPerPageItems"
+        :search="search"
+        select-all
+        item-key="name"
+        class="elevation-1"
+      >
+        <template slot="items" slot-scope="props">
+          <td>
+            <v-checkbox
+              v-model="props.selected"
+              hide-details
+              color="primary"
+            ></v-checkbox>
+          </td>
+          <td class="text-xs-left">{{ props.item.id }}</td>
+          <td class="text-xs-left">{{ props.item.name }}</td>
+          <td class="text-xs-left">{{ props.item.email }}</td>
+          <td class="text-xs-left">{{ props.item.mobile_number }}</td>
+          <td class="text-xs-left">{{ props.item.suburb }}</td>
+          <td class="text-xs-left">{{ props.item.post_code }}</td>
+          <td class="justify-center layout px-0">
+            <v-icon small class="mr-2" v-on:click="">visibility</v-icon>
+            <v-icon small class="mr-2" v-on:click="">edit</v-icon>
+            <v-icon small class="mr-2" v-on:click="">email</v-icon>
+            <v-icon small v-on:click="">delete</v-icon>
+          </td>
+        </template>
+        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+          Your search for "{{ search }}" found no results.
+        </v-alert>
+      </v-data-table>
+    </v-flex>
   </v-flex>
 </template>
 
