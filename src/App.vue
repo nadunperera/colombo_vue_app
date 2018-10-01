@@ -3,11 +3,9 @@
     <main-navigation></main-navigation>
     <v-content>
       <v-container fluid fill-height>
-        <v-layout align-start justify-start row fill-height>
-          <!-- content start -->
-          <router-view/>
-          <!-- content end -->
-        </v-layout>
+        <!-- content start -->
+        <router-view/>
+        <!-- content end -->
       </v-container>
     </v-content>
     <bottom-navigation></bottom-navigation>
