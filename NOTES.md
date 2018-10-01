@@ -37,12 +37,14 @@
 
 # UNCERTAIN SECTION
 
+- May be we need seperate models for all 3 connection types
 - UserConnection Model
 --- user_child
 --- user_master
 --- connection_type
 ----- referrer
 ----- business_partner
+----- partner
 --- created_at
 --- updated_at
 

@@ -77,7 +77,7 @@
             <v-icon>keyboard_arrow_up</v-icon>
             <v-icon>keyboard_arrow_down</v-icon>
           </v-btn>
-          <v-dialog v-model="dialogNew" persistent max-width="500px"> <!-- create new user dialog -->
+          <v-dialog v-model="dialogNew" persistent scrollable max-width="500px"> <!-- create new user dialog -->
             <v-btn fab dark small color="primary" slot="activator">
               <v-icon>add</v-icon>
             </v-btn>
@@ -85,6 +85,7 @@
               <v-card-title>
                 <span class="headline">Create New User</span>
               </v-card-title>
+              <v-divider></v-divider>
               <v-card-text>
                 <v-container grid-list-md>
                   <v-layout wrap>
@@ -212,9 +213,6 @@
                         label="Age"
                         v-model="age"
                         :items="ageChoices"
-                        :error-messages="ageErrors"
-                        @input="$v.age.$touch()"
-                        @blur="$v.age.$touch()"
                       ></v-select>
                     </v-flex>
                     <v-flex xs12 sm6>
@@ -278,9 +276,9 @@
                     </v-flex>
                     <v-flex xs12>
                       <v-autocomplete
-                        :loading="isLoading"
-                        :items="loadedUsers"
-                        :search-input.sync="autoCompleteUsers"
+                        :loading="isLoadingReferrer"
+                        :items="loadedReferrers"
+                        :search-input.sync="autoCompleteReferrer"
                         v-model="referrerSelect"
                         hide-details
                         hide-selected
@@ -291,8 +289,67 @@
                         <template slot="no-data">
                           <v-list-tile>
                             <v-list-tile-title>
-                              Search for the
-                              <strong>User</strong>
+                              Start typing to search for a <strong>Referrer</strong>
+                            </v-list-tile-title>
+                          </v-list-tile>
+                        </template>
+                        <template slot="selection" slot-scope="{ item, selected }">
+                          <span>{{ item.symbol }} | {{ item.name }}</span>
+                        </template>
+                        <template slot="item" slot-scope="{ item, tile }">
+                          <v-list-tile-content>
+                          <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                          <v-list-tile-sub-title v-text="item.symbol"></v-list-tile-sub-title>
+                          </v-list-tile-content>
+                        </template>
+                      </v-autocomplete>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-autocomplete
+                        :loading="isLoadingBusinessPartner"
+                        :items="loadedBusinessPartners"
+                        :search-input.sync="autoCompleteBusinessPartner"
+                        v-model="businessPartnerSelect"
+                        hide-details
+                        hide-selected
+                        label="Business Partner?"
+                        item-text="name"
+                        item-value="symbol"
+                      >
+                        <template slot="no-data">
+                          <v-list-tile>
+                            <v-list-tile-title>
+                              Start typing to search for a <strong>Business Partner</strong>
+                            </v-list-tile-title>
+                          </v-list-tile>
+                        </template>
+                        <template slot="selection" slot-scope="{ item, selected }">
+                          <span>{{ item.symbol }} | {{ item.name }}</span>
+                        </template>
+                        <template slot="item" slot-scope="{ item, tile }">
+                          <v-list-tile-content>
+                          <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                          <v-list-tile-sub-title v-text="item.symbol"></v-list-tile-sub-title>
+                          </v-list-tile-content>
+                        </template>
+                      </v-autocomplete>
+                    </v-flex>
+                    <v-flex xs6>
+                      <v-autocomplete
+                        :loading="isLoadingUser"
+                        :items="loadedUsers"
+                        :search-input.sync="autoCompleteUser"
+                        v-model="partnerSelect"
+                        hide-details
+                        hide-selected
+                        label="Partner?"
+                        item-text="name"
+                        item-value="symbol"
+                      >
+                        <template slot="no-data">
+                          <v-list-tile>
+                            <v-list-tile-title>
+                              Start typing to search for a <strong>Partner</strong>
                             </v-list-tile-title>
                           </v-list-tile>
                         </template>
@@ -308,15 +365,88 @@
                       </v-autocomplete>
                     </v-flex>
                     <v-flex>
-                      <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
+                      <v-dialog v-model="dialogAddPartner" persistent max-width="300px">
+                        <v-btn flat slot="activator" color="primary">Add a Partner</v-btn>
+                        <v-card>
+                          <v-card-title>
+                            <span class="headline">Add a Partner</span>
+                          </v-card-title>
+                          <v-divider></v-divider>
+                          <v-card-text>
+                            <v-container grid-list-md>
+                              <v-layout wrap>
+                                <v-flex xs12>
+                                  <v-text-field
+                                    label="Partner's First Name"
+                                    maxlength="20"
+                                    v-model.trim="partnersFirstName"
+                                    :error-messages="partnersFirstNameErrors"
+                                    @input="$v.partnersFirstName.$touch()"
+                                    @blur="$v.partnersFirstName.$touch()"
+                                  ></v-text-field>
+                                </v-flex>
+                                <v-flex xs12>
+                                  <v-text-field
+                                    label="Partner's Last Name"
+                                    maxlength="20"
+                                    v-model.trim="partnersLastName"
+                                    :error-messages="partnersLastNameErrors"
+                                    @input="$v.partnersLastName.$touch()"
+                                    @blur="$v.partnersLastName.$touch()"
+                                  ></v-text-field>
+                                </v-flex>
+                                <v-flex xs12>
+                                  <v-text-field
+                                    label="Partner's Email"
+                                    v-model="partnersEmail"
+                                    :error-messages="partnersEmailErrors"
+                                    @input="$v.partnersEmail.$touch()"
+                                    @blur="$v.partnersEmail.$touch()"
+                                  ></v-text-field>
+                                </v-flex>
+                                <v-flex xs12>
+                                  <v-text-field
+                                    label="Partner's Mobile Number"
+                                    maxlength="10"
+                                    hint="Format: 0405631465"
+                                    v-model.trim="partnersMobileNumber"
+                                    :error-messages="partnersMobileNumberErrors"
+                                    @input="$v.partnersMobileNumber.$touch()"
+                                    @blur="$v.partnersMobileNumber.$touch()"
+                                  ></v-text-field>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+                          </v-card-text>
+                          <v-divider></v-divider>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="error" flat v-on:click="dialogAddPartner = false">Close</v-btn>
+                            <v-btn color="primary" flat v-on:click="dialogAddPartner = false">Save</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-textarea
+                        label="Comment"
+                        v-model="comment"
+                      ></v-textarea>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="No Marketing Emails" v-model="noMarketingEmails" color="primary"></v-checkbox>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="Do Not Contact" v-model="doNotContact" color="primary"></v-checkbox>
                     </v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>
+              <v-divider></v-divider>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat v-on:click="dialogNew = false">Close</v-btn>
-                <v-btn color="blue darken-1" flat v-on:click="save">Save</v-btn>
+                <v-btn color="error" flat v-on:click="dialogNew = false">Close</v-btn>
+                <v-btn color="primary" flat v-on:click="saveNewUser">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -376,11 +506,14 @@ export default {
     mobileNumber: { required, numeric, minLength: minLength(10) },
     faxNumber: { numeric, minLength: minLength(10) },
     officeNumber: { numeric, minLength: minLength(10) },
-    age: { required },
     userStatus: { required },
     personalIncome: { numeric },
     partnersIncome: { numeric },
     abn: { numeric, minLength: minLength(11) },
+    partnersFirstName: { required },
+    partnersLastName: { required },
+    partnersEmail: { required, email },
+    partnersMobileNumber: { required, numeric, minLength: minLength(10) },
   },
   data() {
     return {
@@ -391,7 +524,7 @@ export default {
       bottom: true,
       transition: 'slide-y-reverse-transition',
 
-      //new user related
+      //new user realted input fields
       userType: null,
       userTypeChoices: [
         'Administrator',
@@ -458,11 +591,31 @@ export default {
       firbRequired: false,
       investmentNeeded: false,
       referrerSelect: null,
+      businessPartnerSelect: null,
+      partnerSelect: null,
+      noMarketingEmails: false,
+      addPartner: false,
+      partnersFirstName: '',
+      partnersLastName: '',
+      partnersEmail: '',
+      partnersMobileNumber: '',
+      partnersAge: '',
+      comment: '',
 
-      //autocomplete users
+      //autocomplete referrers
+      loadedReferrers: [],
+      autoCompleteReferrer: null,
+      isLoadingReferrer: false,
+
+      //autocomplete business partners
+      loadedBusinessPartners: [],
+      autoCompleteBusinessPartner: null,
+      isLoadingBusinessPartner: false,
+
+      //autocomplete users/partners
       loadedUsers: [],
-      isLoading: false,
-      autoCompleteUsers: null,
+      autoCompleteUser: null,
+      isLoadingUser: false,
 
       //axios api
       info: null,
@@ -470,6 +623,7 @@ export default {
       //dialog activators
       dialogNew: false,
       dialogFilter: false,
+      dialogAddPartner: false,
 
       //search text field
       search: '',
@@ -613,7 +767,10 @@ export default {
       this.selected = []
       this.search = ''
     },
-    save () {
+    saveNewUser () {
+      this.$v.$touch()
+    },
+    savePartner () {
       this.$v.$touch()
     },
   },
@@ -638,10 +795,22 @@ export default {
       !this.$v.firstName.required && errors.push('First Name is required')
       return errors
     },
+    partnersFirstNameErrors () {
+      const errors = []
+      if (!this.$v.partnersFirstName.$dirty) return errors
+      !this.$v.partnersFirstName.required && errors.push("Partner's First Name is required")
+      return errors
+    },
     lastNameErrors () {
       const errors = []
       if (!this.$v.lastName.$dirty) return errors
       !this.$v.lastName.required && errors.push('Last Name is required')
+      return errors
+    },
+    partnersLastNameErrors () {
+      const errors = []
+      if (!this.$v.partnersLastName.$dirty) return errors
+      !this.$v.partnersLastName.required && errors.push("Partner's Last Name is required")
       return errors
     },
     emailErrors () {
@@ -649,6 +818,13 @@ export default {
       if (!this.$v.email.$dirty) return errors
       !this.$v.email.email && errors.push('Must be valid e-mail')
       !this.$v.email.required && errors.push('E-mail is required')
+      return errors
+    },
+    partnersEmailErrors () {
+      const errors = []
+      if (!this.$v.partnersEmail.$dirty) return errors
+      !this.$v.partnersEmail.email && errors.push('Must be valid e-mail')
+      !this.$v.partnersEmail.required && errors.push("Partner's E-mail is required")
       return errors
     },
     addressErrors () {
@@ -678,6 +854,14 @@ export default {
       !this.$v.mobileNumber.numeric && errors.push('Mobile Number is numerics only')
       return errors
     },
+    partnersMobileNumberErrors () {
+      const errors = []
+      if (!this.$v.partnersMobileNumber.$dirty) return errors
+      !this.$v.partnersMobileNumber.required && errors.push("Partner's Mobile Number is required")
+      !this.$v.partnersMobileNumber.minLength && errors.push('Mobile Number must be 10 characters long')
+      !this.$v.partnersMobileNumber.numeric && errors.push('Mobile Number is numerics only')
+      return errors
+    },
     faxNumberErrors () {
       const errors = []
       if (!this.$v.faxNumber.$dirty) return errors
@@ -690,12 +874,6 @@ export default {
       if (!this.$v.officeNumber.$dirty) return errors
       !this.$v.officeNumber.minLength && errors.push('Office Number must be 10 characters long')
       !this.$v.officeNumber.numeric && errors.push('Office number is numerics only')
-      return errors
-    },
-    ageErrors () {
-      const errors = []
-      if (!this.$v.age.$dirty) return errors
-      !this.$v.age.required && errors.push('Age is required')
       return errors
     },
     userStatusErrors () {
@@ -725,11 +903,45 @@ export default {
     },
   },
   watch: {
-    autoCompleteUsers (val) {
+    autoCompleteReferrer (val) {
+      // Items have already been loaded
+      if (this.loadedReferrers.length > 0) return
+
+      this.isLoadingReferrer = true
+
+      // Lazily load input users
+      axios
+        .get('https://api.coinmarketcap.com/v2/listings/')
+        .then(res => {
+          this.loadedReferrers = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => (this.isLoadingReferrer = false))
+    },
+    autoCompleteBusinessPartner (val) {
+      // Items have already been loaded
+      if (this.loadedBusinessPartners.length > 0) return
+
+      this.isLoadingBusinessPartner = true
+
+      // Lazily load input users
+      axios
+        .get('https://api.coinmarketcap.com/v2/listings/')
+        .then(res => {
+          this.loadedBusinessPartners = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => (this.isLoadingBusinessPartner = false))
+    },
+    autoCompleteUser (val) {
       // Items have already been loaded
       if (this.loadedUsers.length > 0) return
 
-      this.isLoading = true
+      this.isLoadingUser = true
 
       // Lazily load input users
       axios
@@ -740,7 +952,7 @@ export default {
         .catch(err => {
           console.log(err)
         })
-        .finally(() => (this.isLoading = false))
+        .finally(() => (this.isLoadingUser = false))
     }
   }
 };
