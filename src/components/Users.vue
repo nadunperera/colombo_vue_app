@@ -71,7 +71,7 @@
           </v-alert>
         </v-data-table>
       </v-flex>
-      <v-flex> <!-- v-flex for speed dial -->
+      <v-flex> <!-- v-flex for fab speed dial -->
         <v-speed-dial v-model="fab" :bottom="bottom" :right="right" :direction="direction" :transition="transition">
           <v-btn slot="activator" v-model="fab" color="pink darken-2" dark fab>
             <v-icon>keyboard_arrow_up</v-icon>
@@ -245,6 +245,69 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex>
+                      <v-checkbox label="Own Home?" v-model="ownHome" color="primary"></v-checkbox>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-select
+                        label="Owned Properties"
+                        v-model="ownedProperties"
+                        :items="ownedPropertiesChoices"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="GST Registered?" v-model="gstRegistered" color="primary"></v-checkbox>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                      <v-text-field
+                        label="ABN"
+                        maxlength="11"
+                        v-model.trim="abn"
+                        :error-messages="abnErrors"
+                        @input="$v.abn.$touch()"
+                        @blur="$v.abn.$touch()"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="Australian Resident?" v-model="australianResident" color="primary"></v-checkbox>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="Firb Required?" v-model="firbRequired" color="primary"></v-checkbox>
+                    </v-flex>
+                    <v-flex>
+                      <v-checkbox label="Investment Needed?" v-model="investmentNeeded" color="primary"></v-checkbox>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-autocomplete
+                        :loading="isLoading"
+                        :items="loadedUsers"
+                        :search-input.sync="autoCompleteUsers"
+                        v-model="referrerSelect"
+                        hide-details
+                        hide-selected
+                        label="Referrer?"
+                        item-text="name"
+                        item-value="symbol"
+                      >
+                        <template slot="no-data">
+                          <v-list-tile>
+                            <v-list-tile-title>
+                              Search for the
+                              <strong>User</strong>
+                            </v-list-tile-title>
+                          </v-list-tile>
+                        </template>
+                        <template slot="selection" slot-scope="{ item, selected }">
+                          <span>{{ item.symbol }} | {{ item.name }}</span>
+                        </template>
+                        <template slot="item" slot-scope="{ item, tile }">
+                          <v-list-tile-content>
+                          <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                          <v-list-tile-sub-title v-text="item.symbol"></v-list-tile-sub-title>
+                          </v-list-tile-content>
+                        </template>
+                      </v-autocomplete>
+                    </v-flex>
+                    <v-flex>
                       <v-checkbox label="Do Not Contact" v-model="doNotContact" color="red"></v-checkbox>
                     </v-flex>
                   </v-layout>
@@ -317,6 +380,7 @@ export default {
     userStatus: { required },
     personalIncome: { numeric },
     partnersIncome: { numeric },
+    abn: { numeric, minLength: minLength(11) },
   },
   data() {
     return {
@@ -379,6 +443,26 @@ export default {
       doNotContact: false,
       personalIncome: '',
       partnersIncome: '',
+      ownedProperties: null,
+      ownedPropertiesChoices: [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+      ],
+      ownHome: false,
+      gstRegistered: false,
+      abn: '',
+      australianResident: false,
+      firbRequired: false,
+      investmentNeeded: false,
+      referrerSelect: null,
+
+      //autocomplete users
+      loadedUsers: [],
+      isLoading: false,
+      autoCompleteUsers: null,
 
       //axios api
       info: null,
@@ -590,21 +674,21 @@ export default {
       const errors = []
       if (!this.$v.mobileNumber.$dirty) return errors
       !this.$v.mobileNumber.required && errors.push('Mobile Number is required')
-      !this.$v.mobileNumber.minLength && errors.push('Mobile Number must be at most 10 characters long')
+      !this.$v.mobileNumber.minLength && errors.push('Mobile Number must be 10 characters long')
       !this.$v.mobileNumber.numeric && errors.push('Mobile Number is numerics only')
       return errors
     },
     faxNumberErrors () {
       const errors = []
       if (!this.$v.faxNumber.$dirty) return errors
-      !this.$v.faxNumber.minLength && errors.push('Fax Number must be at most 10 characters long')
+      !this.$v.faxNumber.minLength && errors.push('Fax Number must be 10 characters long')
       !this.$v.faxNumber.numeric && errors.push('Fax Number is numerics only')
       return errors
     },
     officeNumberErrors () {
       const errors = []
       if (!this.$v.officeNumber.$dirty) return errors
-      !this.$v.officeNumber.minLength && errors.push('Office Number must be at most 10 characters long')
+      !this.$v.officeNumber.minLength && errors.push('Office Number must be 10 characters long')
       !this.$v.officeNumber.numeric && errors.push('Office number is numerics only')
       return errors
     },
@@ -632,19 +716,31 @@ export default {
       !this.$v.partnersIncome.numeric && errors.push('Partners Income is numerics only')
       return errors
     },
+    abnErrors () {
+      const errors = []
+      if (!this.$v.abn.$dirty) return errors
+      !this.$v.abn.minLength && errors.push('ABN must be 11 characters long')
+      !this.$v.abn.numeric && errors.push('ABN is numerics only')
+      return errors
+    },
   },
   watch: {
-    top (val) {
-      this.bottom = !val
-    },
-    right (val) {
-      this.left = !val
-    },
-    bottom (val) {
-      this.top = !val
-    },
-    left (val) {
-      this.right = !val
+    autoCompleteUsers (val) {
+      // Items have already been loaded
+      if (this.loadedUsers.length > 0) return
+
+      this.isLoading = true
+
+      // Lazily load input users
+      axios
+        .get('https://api.coinmarketcap.com/v2/listings/')
+        .then(res => {
+          this.loadedUsers = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => (this.isLoading = false))
     }
   }
 };
