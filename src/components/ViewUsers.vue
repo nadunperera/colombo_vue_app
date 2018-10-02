@@ -494,7 +494,9 @@ import { required, email, numeric, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: "ViewUsers",
+
   mixins: [validationMixin],
+
   validations: {
     userType: { required },
     firstName: { required },
@@ -515,6 +517,7 @@ export default {
     partnersEmail: { required, email },
     partnersMobileNumber: { required, numeric, minLength: minLength(10) },
   },
+
   data() {
     return {
       //speed dial options
@@ -748,33 +751,6 @@ export default {
     }
   },
 
-  mounted () {
-    axios
-      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-      .then(response => {
-        this.info = response.data.bpi
-        console.log(this.info)
-      })
-      .catch(error => {
-        console.log(error)
-        this.errored = true
-      })
-      .finally(() => this.loading = false)
-  },
-
-  methods: {
-    clearAll () {
-      this.selected = []
-      this.search = ''
-    },
-    saveNewUser () {
-      this.$v.$touch()
-    },
-    savePartner () {
-      this.$v.$touch()
-    },
-  },
-
   computed: {
     isDisabled() {
       if (this.selected.length == 0) {
@@ -902,6 +878,7 @@ export default {
       return errors
     },
   },
+
   watch: {
     autoCompleteReferrer (val) {
       // Items have already been loaded
@@ -955,6 +932,34 @@ export default {
         .finally(() => (this.isLoadingUser = false))
     }
   }
+
+  mounted () {
+    axios
+      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+      .then(response => {
+        this.info = response.data.bpi
+        console.log(this.info)
+      })
+      .catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+      .finally(() => this.loading = false)
+  },
+
+  methods: {
+    clearAll () {
+      this.selected = []
+      this.search = ''
+    },
+    saveNewUser () {
+      this.$v.$touch()
+    },
+    savePartner () {
+      this.$v.$touch()
+    },
+  },
+
 };
 </script>
 
