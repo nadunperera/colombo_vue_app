@@ -493,7 +493,7 @@ import { validationMixin } from 'vuelidate'
 import { required, email, numeric, minLength } from 'vuelidate/lib/validators'
 
 export default {
-  name: "users",
+  name: "ViewUsers",
   mixins: [validationMixin],
   validations: {
     userType: { required },
