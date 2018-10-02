@@ -931,7 +931,7 @@ export default {
         })
         .finally(() => (this.isLoadingUser = false))
     }
-  }
+  },
 
   mounted () {
     axios
