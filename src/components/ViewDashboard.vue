@@ -1,15 +1,15 @@
 <template>
-  <div class="funnels">
-      <h1>Funnels View</h1>
+  <div class="view-dashboard">
+      <h1>Dashboard View</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: "funnels",
-  data() {
-    return {};
-  }
+    name: "ViewDashboard",
+    data() {
+        return {};
+    }
 };
 </script>
 

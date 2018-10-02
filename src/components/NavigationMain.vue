@@ -71,19 +71,19 @@
 
 <script>
 export default {
-  name: "main-navigation",
+  name: "NavigationMain",
   data() {
     return {
       drawer: null,
       items: [
         { icon: "dashboard", text: "Dashboard", path: "/" },
         { icon: "people", text: "Users", path: "users" },
-        { icon: "business", text: "Projects", path: "projects" },
-        { icon: "place", text: "Events", path: "events" },
-        { icon: "call_split", text: "Funnels", path: "funnels" },
-        { icon: "monetization_on", text: "Sales", path: "sales" },
-        { icon: "folder_special", text: "Invoices", path: "invoices" },
-        { icon: "settings", text: "Settings", path: "settings" }
+        { icon: "business", text: "Projects", path: "" },
+        { icon: "place", text: "Events", path: "" },
+        { icon: "call_split", text: "Funnels", path: "" },
+        { icon: "monetization_on", text: "Sales", path: "" },
+        { icon: "folder_special", text: "Invoices", path: "" },
+        { icon: "settings", text: "Settings", path: "" }
       ]
     };
   },

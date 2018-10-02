@@ -1,12 +1,13 @@
 <template>
-  <div class="sales">
-      <h1>Sales View</h1>
-  </div>
+  <v-footer class="pa-3">
+    <v-spacer></v-spacer>
+    <div>&copy; {{ new Date().getFullYear() }} Colombo v.4.1</div>
+  </v-footer>
 </template>
 
 <script>
 export default {
-  name: "sales",
+  name: "NavigationBottom",
   data() {
     return {};
   }
