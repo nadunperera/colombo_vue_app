@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: "ViewDashboard",
+    name: "DashboardPage",
     data() {
         return {};
     }

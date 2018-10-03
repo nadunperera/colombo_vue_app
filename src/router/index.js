@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import ViewDashboard from "@/components/ViewDashboard";
-import ViewUsers from "@/components/ViewUsers";
+import DashboardPage from "@/components/DashboardPage";
+import UsersPage from "@/components/UsersPage";
 
 Vue.use(Router);
 
@@ -9,13 +9,13 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "ViewDashboard",
-      component: ViewDashboard
+      name: "DashboardPage",
+      component: DashboardPage
     },
     {
       path: "/users",
-      name: "ViewUsers",
-      component: ViewUsers
+      name: "UsersPage",
+      component: UsersPage
     },
   ]
 });
