@@ -77,7 +77,7 @@ export default {
       drawer: null,
       items: [
         { icon: "dashboard", text: "Dashboard", path: "/" },
-        { icon: "people", text: "Users", path: "users" },
+        { icon: "people", text: "Users", path: "/users" },
         { icon: "business", text: "Projects", path: "" },
         { icon: "place", text: "Events", path: "" },
         { icon: "call_split", text: "Funnels", path: "" },

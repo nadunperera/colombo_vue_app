@@ -77,10 +77,13 @@
             <v-icon>keyboard_arrow_up</v-icon>
             <v-icon>keyboard_arrow_down</v-icon>
           </v-btn>
+          <v-btn fab dark small color="primary" to="/users/new">
+            <v-icon>add</v-icon>
+          </v-btn>
           <v-dialog v-model="dialogNew" persistent scrollable max-width="500px"> <!-- create new user dialog -->
-            <v-btn fab dark small color="primary" slot="activator">
+<!--             <v-btn fab dark small color="primary" slot="activator">
               <v-icon>add</v-icon>
-            </v-btn>
+            </v-btn> -->
             <v-card>
               <v-card-title>
                 <span class="headline">Create New User</span>
