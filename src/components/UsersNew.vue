@@ -83,7 +83,7 @@
                           :items="ageChoices"
                         ></v-select>
                       </v-flex>
-                      <v-flex xs12 sm6>
+                      <v-flex xs12 sm4>
                         <v-text-field
                           label="Email"
                           v-model="email"
@@ -93,11 +93,64 @@
                           @blur="$v.email.$touch()"
                         ></v-text-field>
                       </v-flex>
-                      <v-flex xs12 sm6>
+                      <v-flex xs12 sm4>
+                        <v-text-field
+                          label="Mobile Number"
+                          maxlength="10"
+                          hint="Format: 0405631465"
+                          v-model.trim="mobileNumber"
+                          :error-messages="mobileNumberErrors"
+                          @input="$v.mobileNumber.$touch()"
+                          @blur="$v.mobileNumber.$touch()"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm4>
                         <v-text-field
                           label="Purchasing Entity"
                           hint="Full legal purchasing entity name"
                           v-model.trim="purchasingEntity"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs3>
+                        <v-autocomplete
+                          :loading="isLoadingUser"
+                          :items="loadedUsers"
+                          :search-input.sync="autoCompleteUser"
+                          v-model="partnerSelect"
+                          hide-details
+                          hide-selected
+                          label="Partner?"
+                          item-text="name"
+                          item-value="symbol"
+                          @blur="testBlur"
+                        >
+                          <template slot="no-data">
+                            <v-list-tile>
+                              <v-list-tile-title>
+                                Start typing to search for a <strong>Partner</strong> using their mobile number
+                              </v-list-tile-title>
+                            </v-list-tile>
+                          </template>
+                          <template slot="selection" slot-scope="{ item, selected }">
+                            <span>{{ item.symbol }} | {{ item.name }}</span>
+                          </template>
+                          <template slot="item" slot-scope="{ item, tile }">
+                            <v-list-tile-content>
+                            <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                            <v-list-tile-sub-title v-text="item.symbol"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                          </template>
+                        </v-autocomplete>
+                      </v-flex>
+                      <v-flex xs12 sm3>
+                        <v-text-field
+                          label="Partner's Mobile Number"
+                          maxlength="10"
+                          hint="Format: 0405631465"
+                          v-model.trim="partnersMobileNumber"
+                          :error-messages="partnersMobileNumberErrors"
+                          @input="$v.partnersMobileNumber.$touch()"
+                          @blur="$v.partnersMobileNumber.$touch()"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm3>
@@ -122,17 +175,6 @@
                           :error-messages="partnersEmailErrors"
                           @input="$v.partnersEmail.$touch()"
                           @blur="$v.partnersEmail.$touch()"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm3>
-                        <v-text-field
-                          label="Partner's Mobile Number"
-                          maxlength="10"
-                          hint="Format: 0405631465"
-                          v-model.trim="partnersMobileNumber"
-                          :error-messages="partnersMobileNumberErrors"
-                          @input="$v.partnersMobileNumber.$touch()"
-                          @blur="$v.partnersMobileNumber.$touch()"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
@@ -163,17 +205,6 @@
                           :error-messages="postCodeErrors"
                           @input="$v.postCode.$touch()"
                           @blur="$v.postCode.$touch()"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm4>
-                        <v-text-field
-                          label="Mobile Number"
-                          maxlength="10"
-                          hint="Format: 0405631465"
-                          v-model.trim="mobileNumber"
-                          :error-messages="mobileNumberErrors"
-                          @input="$v.mobileNumber.$touch()"
-                          @blur="$v.mobileNumber.$touch()"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm4>
@@ -306,6 +337,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { required, email, numeric, minLength } from 'vuelidate/lib/validators'
 
@@ -364,6 +396,7 @@ export default {
       ],
       firstName: '',
       lastName: '',
+      partnerSelect: null,
       partnersFirstName: '',
       partnersLastName: '',
       partnersEmail: '',
@@ -383,6 +416,27 @@ export default {
         '36-50',
         '51+',
       ],
+      personalIncome: '',
+      partnersIncome: '',
+      ownedProperties: null,
+      ownedPropertiesChoices: [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+      ],
+      ownHome: false,
+      gstRegistered: false,
+      abn: '',
+      australianResident: false,
+      firbRequired: false,
+      investmentNeeded: false,
+
+      //autocomplete users/partners
+      loadedUsers: [],
+      autoCompleteUser: null,
+      isLoadingUser: false,
     }
   },
 
@@ -472,10 +526,53 @@ export default {
       !this.$v.userStatus.required && errors.push('User Status is required')
       return errors
     },
+    personalIncomeErrors () {
+      const errors = []
+      if (!this.$v.personalIncome.$dirty) return errors
+      !this.$v.personalIncome.numeric && errors.push('Personal Income is numerics only')
+      return errors
+    },
+    partnersIncomeErrors () {
+      const errors = []
+      if (!this.$v.partnersIncome.$dirty) return errors
+      !this.$v.partnersIncome.numeric && errors.push('Partners Income is numerics only')
+      return errors
+    },
+    abnErrors () {
+      const errors = []
+      if (!this.$v.abn.$dirty) return errors
+      !this.$v.abn.minLength && errors.push('ABN must be 11 characters long')
+      !this.$v.abn.numeric && errors.push('ABN is numerics only')
+      return errors
+    },
+  },
+
+  watch: {
+    autoCompleteUser (val) {
+      // Items have already been loaded
+      if (this.loadedUsers.length > 0) return
+
+      this.isLoadingUser = true
+
+      // Lazily load input users
+      axios
+        .get('https://api.coinmarketcap.com/v2/listings/')
+        .then(res => {
+          this.loadedUsers = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => (this.isLoadingUser = false))
+    }
   },
 
   methods: {
-
+    testBlur() {
+      if (this.partnerSelect == null) {
+        console.log("No matching result, time to add my own?")
+      }
+    }
   }
 }
 </script>
