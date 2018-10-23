@@ -111,7 +111,7 @@
                           v-model.trim="purchasingEntity"
                         ></v-text-field>
                       </v-flex>
-                      <v-flex xs3>
+                      <v-flex xs12 sm6>
                         <v-combobox
                           :loading="isLoadingUser"
                           v-model="partnersEmail"
@@ -125,9 +125,9 @@
                           @blur="$v.partnersEmail.$touch()"
                         ></v-combobox>
                       </v-flex>
-                      <v-flex xs12 sm3>
+                      <v-flex xs12 sm6>
                         <v-text-field
-                          label="Partner's Mobile Number"
+                          label="Partner's Mobile"
                           maxlength="10"
                           hint="Format: 0405631465"
                           v-model.trim="partnersMobileNumber"
@@ -136,19 +136,32 @@
                           @blur="$v.partnersMobileNumber.$touch()"
                         ></v-text-field>
                       </v-flex>
-                      <v-flex xs12 sm3>
+                      <v-flex xs12 sm4>
                         <v-text-field
                           label="Partner's First Name"
                           maxlength="20"
                           v-model.trim="partnersFirstName"
+                          :error-messages="partnersFirstNameErrors"
+                          @input="$v.partnersFirstName.$touch()"
+                          @blur="$v.partnersFirstName.$touch()"
                         ></v-text-field>
                       </v-flex>
-                      <v-flex xs12 sm3>
+                      <v-flex xs12 sm4>
                         <v-text-field
                           label="Partner's Last Name"
                           maxlength="20"
                           v-model.trim="partnersLastName"
+                          :error-messages="partnersLastNameErrors"
+                          @input="$v.partnersLastName.$touch()"
+                          @blur="$v.partnersLastName.$touch()"
                         ></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm4>
+                        <v-select
+                          label="Partner's Age"
+                          v-model="partnersAge"
+                          :items="ageChoices"
+                        ></v-select>
                       </v-flex>
                       <v-flex xs12 sm6>
                         <v-text-field
@@ -312,31 +325,10 @@
 <script>
 import axios from 'axios'
 import { validationMixin } from 'vuelidate'
-import { required, email, numeric, minLength } from 'vuelidate/lib/validators'
+import { required, email, numeric, minLength, requiredIf } from 'vuelidate/lib/validators'
 
 export default {
   name: "UsersNew",
-
-  mixins: [validationMixin],
-
-  validations: {
-    userType: { required },
-    firstName: { required },
-    lastName: { required },
-    email: { required, email },
-    address: { required },
-    suburb: { required },
-    postCode: { required, numeric },
-    mobileNumber: { required, numeric, minLength: minLength(10) },
-    faxNumber: { numeric, minLength: minLength(10) },
-    officeNumber: { numeric, minLength: minLength(10) },
-    userStatus: { required },
-    personalIncome: { numeric },
-    partnersIncome: { numeric },
-    abn: { numeric, minLength: minLength(11) },
-    partnersEmail: { email },
-    partnersMobileNumber: { numeric, minLength: minLength(10) },
-  },
 
   data () {
     return {
@@ -369,6 +361,7 @@ export default {
       ],
       firstName: '',
       lastName: '',
+      hasPartner: false,
       partnersFirstName: '',
       partnersLastName: '',
       partnersEmail: '',
@@ -382,6 +375,7 @@ export default {
       faxNumber: '',
       officeNumber: '',
       age: null,
+      partnersAge: null,
       ageChoices: [
         '15-25',
         '26-35',
@@ -412,6 +406,48 @@ export default {
     }
   },
 
+  mixins: [validationMixin],
+
+  validations: {
+    userType: { required },
+    firstName: { required },
+    lastName: { required },
+    email: { required, email },
+    address: { required },
+    suburb: { required },
+    postCode: { required, numeric },
+    mobileNumber: { required, numeric, minLength: minLength(10) },
+    faxNumber: { numeric, minLength: minLength(10) },
+    officeNumber: { numeric, minLength: minLength(10) },
+    userStatus: { required },
+    personalIncome: { numeric },
+    partnersIncome: { numeric },
+    abn: { numeric, minLength: minLength(11) },
+    partnersFirstName: {
+      required: requiredIf(function () {
+        return this.hasPartner
+      })
+    },
+    partnersLastName: {
+      required: requiredIf(function () {
+        return this.hasPartner
+      })
+    },
+    partnersEmail: {
+      required: requiredIf(function () {
+        return this.hasPartner
+      }),
+      email
+    },
+    partnersMobileNumber: {
+      required: requiredIf(function () {
+        return this.hasPartner
+      }),
+      numeric,
+      minLength: minLength(10)
+    },
+  },
+
   computed: {
     userTypeErrors () {
       const errors = []
@@ -431,6 +467,18 @@ export default {
       !this.$v.lastName.required && errors.push('Last Name is required')
       return errors
     },
+    partnersFirstNameErrors () {
+      const errors = []
+      if (!this.$v.partnersFirstName.$dirty) return errors
+      !this.$v.partnersFirstName.required && errors.push('First Name is required')
+      return errors
+    },
+    partnersLastNameErrors () {
+      const errors = []
+      if (!this.$v.partnersLastName.$dirty) return errors
+      !this.$v.partnersLastName.required && errors.push('Last Name is required')
+      return errors
+    },
     emailErrors () {
       const errors = []
       if (!this.$v.email.$dirty) return errors
@@ -442,6 +490,7 @@ export default {
       const errors = []
       if (!this.$v.partnersEmail.$dirty) return errors
       !this.$v.partnersEmail.email && errors.push('Must be valid e-mail')
+      !this.$v.partnersEmail.required && errors.push('E-mail is required')
       return errors
     },
     addressErrors () {
@@ -474,6 +523,7 @@ export default {
     partnersMobileNumberErrors () {
       const errors = []
       if (!this.$v.partnersMobileNumber.$dirty) return errors
+      !this.$v.partnersMobileNumber.required && errors.push('Mobile Number is required')
       !this.$v.partnersMobileNumber.minLength && errors.push('Mobile Number must be 10 characters long')
       !this.$v.partnersMobileNumber.numeric && errors.push('Mobile Number is numerics only')
       return errors
