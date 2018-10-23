@@ -112,35 +112,18 @@
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs3>
-                        <v-autocomplete
+                        <v-combobox
                           :loading="isLoadingUser"
+                          v-model="partnersEmail"
                           :items="loadedUsers"
                           :search-input.sync="autoCompleteUser"
-                          v-model="partnerSelect"
-                          hide-details
-                          hide-selected
-                          label="Partner?"
                           item-text="name"
                           item-value="symbol"
-                          @blur="testBlur"
-                        >
-                          <template slot="no-data">
-                            <v-list-tile>
-                              <v-list-tile-title>
-                                Start typing to search for a <strong>Partner</strong> using their mobile number
-                              </v-list-tile-title>
-                            </v-list-tile>
-                          </template>
-                          <template slot="selection" slot-scope="{ item, selected }">
-                            <span>{{ item.symbol }} | {{ item.name }}</span>
-                          </template>
-                          <template slot="item" slot-scope="{ item, tile }">
-                            <v-list-tile-content>
-                            <v-list-tile-title v-text="item.name"></v-list-tile-title>
-                            <v-list-tile-sub-title v-text="item.symbol"></v-list-tile-sub-title>
-                            </v-list-tile-content>
-                          </template>
-                        </v-autocomplete>
+                          label="Partner's Email"
+                          :error-messages="partnersEmailErrors"
+                          @input="$v.partnersEmail.$touch()"
+                          @blur="$v.partnersEmail.$touch()"
+                        ></v-combobox>
                       </v-flex>
                       <v-flex xs12 sm3>
                         <v-text-field
@@ -165,16 +148,6 @@
                           label="Partner's Last Name"
                           maxlength="20"
                           v-model.trim="partnersLastName"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm3>
-                        <v-text-field
-                          label="Partner's Email"
-                          v-model="partnersEmail"
-                          maxlength="50"
-                          :error-messages="partnersEmailErrors"
-                          @input="$v.partnersEmail.$touch()"
-                          @blur="$v.partnersEmail.$touch()"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
@@ -236,7 +209,7 @@
                   </v-container>
                 </v-card-text>
               </v-card>
-              <v-btn color="primary" @click="e1 = 2">Continue</v-btn>
+              <v-btn color="primary" @click="nextStep">Continue</v-btn>
               <v-btn flat @click="dialogClose = true">Cancel</v-btn>
             </v-stepper-content>
 
@@ -396,7 +369,6 @@ export default {
       ],
       firstName: '',
       lastName: '',
-      partnerSelect: null,
       partnersFirstName: '',
       partnersLastName: '',
       partnersEmail: '',
@@ -433,7 +405,7 @@ export default {
       firbRequired: false,
       investmentNeeded: false,
 
-      //autocomplete users/partners
+      //autocomplete combobox users/partners
       loadedUsers: [],
       autoCompleteUser: null,
       isLoadingUser: false,
@@ -568,10 +540,14 @@ export default {
   },
 
   methods: {
-    testBlur() {
-      if (this.partnerSelect == null) {
-        console.log("No matching result, time to add my own?")
-      }
+    // this is to validate forms when pressing the continue button
+    nextStep () {
+        this.$v.$touch()
+        if (this.$v.$invalid) {
+          console.log("Fix the errors on the form!")
+        } else {
+          this.e1 = 2
+        }
     }
   }
 }
